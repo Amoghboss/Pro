@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Northstar Agency</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #121a2b;
+      --panel: #171f32;
+      --card: #1d2940;
+      --text: #edf3ff;
+      --muted: #a6b3cf;
+      --primary: #6ea8fe;
+      --secondary: #8ff0d2;
+      --accent: #ffb86c;
+      --line: rgba(255,255,255,0.08);
+      --shadow: 0 18px 40px rgba(0,0,0,0.28);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #09111d 0%, #0f172a 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; padding: 0; margin: 0; }
+
+    .container {
+      width: min(1180px, 90%);
+      margin: 0 auto;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 1.4rem;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: 0.2s ease;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #7bd2ff);
+      color: #081827;
+      box-shadow: 0 12px 28px rgba(110,168,254,0.25);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(110,168,254,0.35);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.03);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11,16,32,0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 80px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      position: relative;
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 6px;
+      background: rgba(9,17,29,0.7);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hero {
+      padding: 5rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      right: -80px;
+      top: -20px;
+      background: radial-gradient(circle, rgba(110,168,254,0.25), transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 0.45rem 0.8rem;
+      background: rgba(110,168,254,0.12);
+      border: 1px solid rgba(110,168,254,0.2);
+      border-radius: 999px;
+      color: #dcecff;
+      font-size: 0.82rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(2.7rem, 5vw, 5rem);
+      line-height: 1.05;
+      margin: 0 0 1rem;
+      letter-spacing: -0.05em;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.08rem;
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stats {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      min-width: 120px;
+      padding: 1rem 1.2rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .stat-box strong {
+      display: block;
+      font-size: 1.75rem;
+      color: var(--secondary);
+    }
+
+    .stat-box span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 480px;
+    }
+
+    .dashboard {
+      position: absolute;
+      inset: 4% 0 0 8%;
+      background: linear-gradient(180deg, rgba(23,31,50,0.95), rgba(14,20,33,0.98));
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dots {
+      display: flex;
+      gap: 0.45rem;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot:nth-child(1) { background: #ff6b6b; }
+    .dot:nth-child(2) { background: #f7c948; }
+    .dot:nth-child(3) { background: #67d27b; }
+
+    .dashboard-body {
+      padding: 1.4rem;
+    }
+
+    .top-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .metric-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1rem;
+    }
+
+    .metric-card small {
+      color: var(--muted);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .metric-card strong {
+      font-size: 1.7rem;
+      color: var(--text);
+    }
+
+    .chart {
+      height: 180px;
+      display: flex;
+      align-items: end;
+      gap: 0.7rem;
+      padding: 1rem 0.4rem 0;
+    }
+
+    .chart span {
+      flex: 1;
+      border-radius: 10px 10px 0 0;
+      background: linear-gradient(180deg, var(--primary), var(--secondary));
+      box-shadow: inset 0 -8px 18px rgba(255,255,255,0.08);
+    }
+
+    .floating-card {
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      background: rgba(18,26,43,0.95);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1rem 1.2rem;
+      width: 230px;
+      box-shadow: var(--shadow);
+    }
+
+    .floating-card .label {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .floating-card strong {
+      display: block;
+      font-size: 1.6rem;
+      margin-top: 0.2rem;
+      color: var(--accent);
+    }
+
+    section {
+      padding: 4rem 0;
+    }
+
+    .section-head {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .section-head h2 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.04em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.4rem;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 1.7rem;
+      box-shadow: var(--shadow);
+    }
+
+    .icon {
+      width: 58px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      background: rgba(110,168,254,0.12);
+      font-size: 1.7rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      margin: 0 0 0.7rem;
+      font-size: 1.3rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .result-panel {
+      background: linear-gradient(180deg, rgba(110,168,254,0.08), rgba(255,255,255,0.02));
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .mini-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.1rem;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--line);
+    }
+
+    .mini-item strong {
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .mini-item span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .mini-item .percent {
+      color: var(--secondary);
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .step {
+      position: relative;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1.5rem;
+    }
+
+    .step-number {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #081827;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .step h3 {
+      margin: 0 0 0.5rem;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .clients {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+    }
+
+    .client {
+      min-height: 92px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .quote {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 1.6rem;
+      box-shadow: var(--shadow);
+    }
+
+    .quote p {
+      color: var(--text);
+      margin: 0 0 1.25rem;
+      font-size: 1.02rem;
+    }
+
+    .person {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #081827;
+      font-weight: 800;
+    }
+
+    .person small {
+      display: block;
+      color: var(--muted);
+    }
+
+    .cta {
+      padding: 4rem 0 5rem;
+    }
+
+    .cta-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      background: linear-gradient(135deg, rgba(110,168,254,0.14), rgba(143,240,210,0.08));
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 2rem 2.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .cta-box h3 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      letter-spacing: -0.04em;
+    }
+
+    .cta-box p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 1.4rem 0 2rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid, .results-grid, .services-grid, .process-grid, .testimonial-grid, .clients {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .cta-box {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-grid, .results-grid, .services-grid, .process-grid, .testimonial-grid, .clients, .top-metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 3.5rem;
+      }
+
+      .nav-actions .btn-secondary {
+        display: none;
+      }
+
+      .cta-box {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">
+          <span class="brand-mark"></span>
+          <span>NORTHSTAR</span>
+        </div>
+
+        <div class="nav-links">
+          <a href="#services">Services</a>
+          <a href="#work">Work</a>
+          <a href="#process">Process</a>
+          <a href="#clients">Clients</a>
+          <a href="#contact">Contact</a>
+        </div>
+
+        <div class="nav-actions">
+          <a href="#contact" class="btn btn-secondary">Book a call</a>
+          <a href="#contact" class="btn btn-primary">Get a proposal</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Growth-focused digital agency</span>
+          <h1>Turn your brand into a growth engine.</h1>
+          <p>
+            We help ambitious businesses design standout experiences, sharpen their message,
+            and scale demand through strategy, creative, and performance marketing.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn-primary">Schedule a consult</a>
+            <a href="#services" class="btn btn-secondary">Explore services</a>
+          </div>
+
+          <div class="stats">
+            <div class="stat-box">
+              <strong>4.9/5</strong>
+              <span>Client rating</span>
+            </div>
+            <div class="stat-box">
+              <strong>150+</strong>
+              <span>Projects launched</span>
+            </div>
+            <div class="stat-box">
+              <strong>3.4x</strong>
+              <span>Avg. ROAS</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="dashboard">
+            <div class="dashboard-header">
+              <div class="dots">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+              <div style="color: var(--muted); font-size: 0.8rem;">northstar-dashboard</div>
+            </div>
+
+            <div class="dashboard-body">
+              <div class="top-metrics">
+                <div class="metric-card">
+                  <small>Revenue</small>
+                  <strong>$184k</strong>
+                </div>
+                <div class="metric-card">
+                  <small>Leads</small>
+                  <strong>2.8k</strong>
+                </div>
+                <div class="metric-card">
+                  <small>Conversion</small>
+                  <strong>7.6%</strong>
+                </div>
+              </div>
+
+              <div class="chart">
+                <span style="height: 28%;"></span>
+                <span style="height: 38%;"></span>
+                <span style="height: 54%;"></span>
+                <span style="height: 62%;"></span>
+                <span style="height: 78%;"></span>
+                <span style="height: 94%;"></span>
+                <span style="height: 88%;"></span>
+                <span style="height: 100%;"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="floating-card">
+            <div class="label">Pipeline growth</div>
+            <strong>+142%</strong>
+            <div style="color: var(--secondary); font-size: 0.82rem;">Quarter over quarter</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="container">
+        <div class="section-head">
+          <h2>Strategy and creative that drives results</h2>
+          <p>
+            From positioning and websites to paid media and content strategy,
+            we build the systems that keep your growth compounding.
+          </p>
+        </div>
+
+        <div class="services-grid">
+          <article class="card">
+            <div class="icon">✦</div>
+            <h3>Brand Strategy</h3>
+            <p>
+              Positioning, messaging, and go-to-market planning that turns your business
+              into a category leader.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="icon">◰</div>
+            <h3>Web Design</h3>
+            <p>
+              Modern experiences designed to convert, build trust, and help your sales
+              process feel frictionless.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="icon">↗</div>
+            <h3>Performance Marketing</h3>
+            <p>
+              Search, paid social, funnel optimization, and growth testing designed to
+              increase qualified leads and revenue.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="container results-grid">
+        <div class="result-panel">
+          <span class="eyebrow">Recent wins</span>
+          <h2 style="margin-top:0; font-size: clamp(2rem, 3vw, 2.8rem); letter-spacing:-0.04em;">
+            Momentum built from insight, not guesswork.
+          </h2>
+
+          <div class="mini-list">
+            <div class="mini-item">
+              <div>
+                <strong>Velocity Labs</strong>
+                <span>Brand refresh + landing pages</span>
+              </div>
+              <div class="percent">+86%</div>
+            </div>
+
+            <div class="mini-item">
+              <div>
+                <strong>Oak & Co.</strong>
+                <span>Demand generation strategy</span>
+              </div>
+              <div class="percent">+124%</div>
+            </div>
+
+            <div class="mini-item">
+              <div>
+                <strong>Harbor Finance</strong>
+                <span>Paid acquisition optimization</span>
+              </div>
+              <div class="percent">+62%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="font-size: 0.82rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem;">
+            Why teams choose us
+          </div>
+
+          <h3 style="margin-top:0; font-size: 1.8rem;">Clear thinking. Fast execution.</h3>
+
+          <ul style="color: var(--muted); line-height: 2;">
+            <li>✓ Senior-level strategic input</li>
+            <li>✓ Full-funnel growth systems</li>
+            <li>✓ Tight collaboration and reporting</li>
+            <li>✓ Built for measurable business impact</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="process">
+      <div class="container">
+        <div class="section-head">
+          <h2>A simple process that keeps momentum high</h2>
+          <p>We turn complexity into a clear, low-friction path to growth.</p>
+        </div>
+
+        <div class="process-grid">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3>Discover</h3>
+            <p>We reverse-engineer your market, audience, and business opportunities.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3>Design</h3>
+            <p>We shape the strategy, positioning, and creative direction to align around growth.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3>Build</h3>
+            <p>We launch the assets, systems, and campaigns that create measurable momentum.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">4</div>
+            <h3>Optimize</h3>
+            <p>We continuously test and refine based on data to maximize performance and ROI.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="clients">
+      <div class="container">
+        <div class="section-head">
+          <h2>Trusted by ambitious teams</h2>
+          <p>We work with founders, operators, and marketing teams who care about outcomes.</p>
+        </div>
+
+        <div class="clients">
+          <div class="client">Apex</div>
+          <div class="client">Northpeak</div>
+          <div class="client">Horizon</div>
+          <div class="client">Lattice</div>
+          <div class="client">Summit</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <h2>What clients are saying</h2>
+          <p>Partnerships built on clarity, execution, and measurable progress.</p>
+        </div>
+
+        <div class="testimonial-grid">
+          <article class="quote">
+            <p>
+              “Northstar transformed how we present our brand. The new positioning and website
+              turned our pipeline into something we could actually forecast.”
+            </p>
+            <div class="person">
+              <div class="avatar">AM</div>
+              <div>
+                <strong>Alicia Moore</strong>
+                <small>CEO, Harbor Finance</small>
+              </div>
+            </div>
+          </article>
+
+          <article class="quote">
+            <p>
+              “Their team brought strategic clarity and creative execution together in a way
+              our previous agencies never did. We saw growth within the first quarter.”
+            </p>
+            <div class="person">
+              <div class="avatar">JD</div>
+              <div>
+                <strong>James Diaz</strong>
+                <small>Marketing Lead, Velocity Labs</small>
+              </div>
+            </div>
+          </article>
+
+          <article class="quote">
+            <p>
+              “Clear communication, rapid iteration, and a real understanding of performance.
+              We now have a system we can scale confidently.”
+            </p>
+            <div class="person">
+              <div class="avatar">RP</div>
+              <div>
+                <strong>Rachel Patel</strong>
+                <small>Founder, Oak & Co.</small>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="contact">
+      <div class="container">
+        <div class="cta-box">
+          <div>
+            <h3>Ready to build your next growth chapter?</h3>
+            <p>Let’s talk about the goals, bottlenecks, and opportunities in front of you.</p>
+          </div>
+          <div class="hero-actions" style="margin-bottom: 0;">
+            <a href="mailto:hello@northstaragency.com" class="btn btn-primary">hello@northstaragency.com</a>
+            <a href="tel:+15551234567" class="btn btn-secondary">+1 (555) 123-4567</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Northstar Agency. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>
